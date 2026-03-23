@@ -28,8 +28,9 @@ public class ShootingController : MonoBehaviour
         {
             if (Input.GetKeyDown((KeyCode)((int)KeyCode.JoystickButton0 + i)))
             {
-                Debug.Log("Gamepad Button " + i + " pressed!");
+                Debug.Log("Gamepad Button " + i + " pressed during gameplay!");
                 Shoot();
+                break;
             }
         }
     }
@@ -38,21 +39,17 @@ public class ShootingController : MonoBehaviour
     {
         Debug.Log("Shooting!");
         
-        // Raycast from center of screen (where crosshair is)
         Ray ray = arCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100f))
         {
-            // Check if we hit a bot
             BotHealth botHealth = hit.collider.GetComponentInParent<BotHealth>();
             
             if (botHealth != null)
             {
-                // Get the tag of what we hit (Head, Chest, Limb)
                 string bodyPart = hit.collider.tag;
                 botHealth.TakeDamage(bodyPart);
-                
                 Debug.Log("Hit: " + bodyPart);
             }
             else

@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIManager : MonoBehaviour
 {
@@ -14,6 +16,10 @@ public class UIManager : MonoBehaviour
     
     [Header("References")]
     public GameManager gameManager;
+    
+    [Header("First Selected Buttons")]
+    public Button startMenuFirstButton;
+    public Button endMenuFirstButton;
 
     void Start()
     {
@@ -39,6 +45,9 @@ public class UIManager : MonoBehaviour
             endMenuCanvas.gameObject.SetActive(false);
         else
             Debug.LogError("endMenuCanvas is NULL!");
+        
+        // Auto-select first button
+        SelectButton(startMenuFirstButton);
     }
 
     public void ShowGameUI()
@@ -53,6 +62,9 @@ public class UIManager : MonoBehaviour
             
         if (endMenuCanvas != null)
             endMenuCanvas.gameObject.SetActive(false);
+        
+        // Clear selection during gameplay
+        EventSystem.current.SetSelectedGameObject(null);
     }
 
     public void ShowEndMenu(int finalScore)
@@ -97,6 +109,18 @@ public class UIManager : MonoBehaviour
         {
             finalScoreText.text = "Final Score: " + finalScore;
             Debug.Log("Final score text updated to: " + finalScoreText.text);
+        }
+        
+        // Auto-select first button
+        SelectButton(endMenuFirstButton);
+    }
+    
+    void SelectButton(Button button)
+    {
+        if (button != null)
+        {
+            EventSystem.current.SetSelectedGameObject(button.gameObject);
+            Debug.Log("Selected button: " + button.gameObject.name);
         }
     }
 
